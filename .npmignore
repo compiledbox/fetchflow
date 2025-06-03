@@ -1,0 +1,23 @@
+# Exclude development & test files
+src/
+tests/
+coverage/
+node_modules/
+.git/
+.gitignore
+.npmignore
+tsconfig*
+jest.config.*
+*.log
+*.md
+!.README.md
+!.CHANGELOG.md
+
+# Exclude configs
+*.env
+*.env.*
+.vscode/
+.idea/
+.eslintrc*
+.prettierrc*
+.editorconfig
