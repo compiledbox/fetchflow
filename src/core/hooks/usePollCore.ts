@@ -2,10 +2,7 @@ import { useFetchCore } from './useFetchCore';
 import type { PollCoreOptions, PollCoreReturn } from './types';
 import { FetchError } from '../errors/FetchError';
 
-export function usePollCore<T>(
-  url: string,
-  options: PollCoreOptions,
-): PollCoreReturn<T> {
+export function usePollCore<T>(url: string, options: PollCoreOptions): PollCoreReturn<T> {
   const {
     intervalMs,
     enabled = true,

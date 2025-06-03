@@ -5,10 +5,10 @@ import { retryWithBackoff } from '../errors/retryPolicy';
 import { RequestOptions } from '../network/types';
 
 interface FetchCoreOptions extends RequestOptions {
-  cacheTimeMs?: number;     // How long to cache the response
-  retryCount?: number;      // Number of retry attempts on failure
-  retryDelayMs?: number;    // Base delay between retries (exponential backoff)
-  cacheEnabled?: boolean;   // Enable or disable caching
+  cacheTimeMs?: number; // How long to cache the response
+  retryCount?: number; // Number of retry attempts on failure
+  retryDelayMs?: number; // Base delay between retries (exponential backoff)
+  cacheEnabled?: boolean; // Enable or disable caching
 }
 
 interface FetchResult<T> {
@@ -58,11 +58,7 @@ export async function useFetchCore<T>(
 
   // Attempt fetch with retry logic
   try {
-    const data = await retryWithBackoff<T>(
-      fetchData,
-      retryCount,
-      retryDelayMs,
-    );
+    const data = await retryWithBackoff<T>(fetchData, retryCount, retryDelayMs);
 
     // Cache fetched data
     if (cacheEnabled) {

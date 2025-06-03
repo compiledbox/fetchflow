@@ -6,10 +6,7 @@ import { UseFetchOptions, UseFetchReturn } from './types';
 /**
  * React hook for performing secure, cached, and retry-enabled fetches.
  */
-export function useFetch<T>(
-  url: string,
-  options: UseFetchOptions = {},
-): UseFetchReturn<T> {
+export function useFetch<T>(url: string, options: UseFetchOptions = {}): UseFetchReturn<T> {
   const {
     enabled = true,
     cacheTimeMs,

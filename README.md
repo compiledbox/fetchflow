@@ -34,7 +34,7 @@ npm install fetchflow
 import { useFetch } from 'fetchflow';
 
 const { data, isLoading, error, refetch } = useFetch<User[]>(
-  'https://jsonplaceholder.typicode.com/users'
+  'https://jsonplaceholder.typicode.com/users',
 );
 ```
 
@@ -55,10 +55,7 @@ const { mutate, isMutating, error } = useMutation<User, Partial<User>>({
 ```typescript
 import { usePoll } from 'fetchflow';
 
-const { data } = usePoll<User[]>(
-  'https://api.example.com/users',
-  { intervalMs: 10000 }
-);
+const { data } = usePoll<User[]>('https://api.example.com/users', { intervalMs: 10000 });
 ```
 
 ## GraphQL Example
@@ -75,10 +72,10 @@ const query = `
   }
 `;
 
-const data = await graphqlClient<{ user: User }>(
-  'https://graphql.example.com',
-  { query, variables: { id: 1 } }
-);
+const data = await graphqlClient<{ user: User }>('https://graphql.example.com', {
+  query,
+  variables: { id: 1 },
+});
 ```
 
 ## 🔒 Advanced: Authenticated/API Credential Requests
@@ -90,8 +87,8 @@ import { useFetch } from 'fetchflow';
 
 const { data } = useFetch<User[]>('https://api.example.com/secure/users', {
   headers: {
-    Authorization: `Bearer ${yourAuthToken}`
-  }
+    Authorization: `Bearer ${yourAuthToken}`,
+  },
 });
 ```
 
@@ -105,10 +102,10 @@ const result = await graphqlClient<{ user: User }>(
   { query, variables: { id: 123 } },
   {
     headers: {
-      Authorization: `Bearer ${yourAuthToken}`
+      Authorization: `Bearer ${yourAuthToken}`,
     },
     credentials: 'include', // if you want to send cookies as well
-  }
+  },
 );
 ```
 
@@ -122,12 +119,12 @@ const result = await graphqlClient<{ user: User }>(
 | `graphqlClient` | Use for advanced GraphQL queries/mutations. |
 | `FetchError`    | Standardized error handling for all hooks.  |
 
-
 ## How does FetchFlow handle caching?
 
 By default, FetchFlow uses an in-memory cache for all fetches. This means repeated fetches to the same URL (with the same params) within a cache window will return instantly from memory (no network call).
 
 Default Behavior
+
 - All hooks (useFetch, usePoll, etc.) use the in-memory cache automatically.
 - Cache expiry (TTL) can be configured with the cacheTimeMs option (default: 5 minutes).
 
@@ -139,13 +136,15 @@ You don’t have to do anything extra—it “just works” out of the box!
 const { data } = useFetch<User[]>('https://api.com/users');
 // Second call with same params will return cached value until expired.
 ```
+
 To change cache duration:
 
 ```typescript
 const { data } = useFetch<User[]>('https://api.com/users', {
-  cacheTimeMs: 60000 // 1 minute cache
+  cacheTimeMs: 60000, // 1 minute cache
 });
 ```
+
 ## How to Use LocalStorage (Persistent) Cache
 
 You can manually instantiate and use the StorageCache class provided and wire it into your own data fetching logic, e.g., by replacing the in-memory cache in your custom hook.
@@ -164,6 +163,7 @@ persistentCache.set('my-key', [{ id: 1, name: 'Alice' }], 600_000);
 // Get value (auto-removes if expired)
 const users = persistentCache.get('my-key');
 ```
+
 #### Note
 
 - The core useFetch and usePoll hooks use only in-memory cache by default for performance and simplicity.
@@ -239,14 +239,11 @@ After storing the token, use it in your API calls:
 import { useFetch } from 'fetchflow/adapters/react';
 
 const token = localStorage.getItem('sessionToken');
-const { data, error } = useFetch<User[]>(
-  'https://api.example.com/users',
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+const { data, error } = useFetch<User[]>('https://api.example.com/users', {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 ```
 
 ## If You Prefer Cookies
@@ -265,11 +262,9 @@ const { mutate } = useMutation<LoginResponse, LoginPayload>({
 And in fetches:
 
 ```typescript
-const { data } = useFetch<User[]>(
-  'https://api.example.com/users',
-  { credentials: 'include' }
-);
+const { data } = useFetch<User[]>('https://api.example.com/users', { credentials: 'include' });
 ```
+
 FetchFlow gives you full control to handle authentication in a type-safe, robust, and standard way!
 
 ## Contributing

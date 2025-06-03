@@ -6,10 +6,7 @@ const DEFAULT_TIMEOUT = 15000; // 15 seconds timeout
 /**
  * Secure, robust HTTP client wrapping native fetch.
  */
-export async function httpClient<T>(
-  url: string,
-  options: RequestOptions = {},
-): Promise<T> {
+export async function httpClient<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const {
     method = 'GET',
     headers = {},

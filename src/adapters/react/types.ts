@@ -1,4 +1,3 @@
-
 import { FetchError } from '../../core/errors/FetchError';
 import { RequestOptions } from '../../core/network/types';
 

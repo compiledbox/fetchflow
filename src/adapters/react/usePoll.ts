@@ -2,14 +2,10 @@ import { useEffect, useRef } from 'react';
 import { UsePollOptions, UsePollReturn } from './types';
 import { useFetch } from './useFetch';
 
-
 /**
  * React hook to automatically poll data at specified intervals.
  */
-export function usePoll<T>(
-  url: string,
-  options: UsePollOptions,
-): UsePollReturn<T> {
+export function usePoll<T>(url: string, options: UsePollOptions): UsePollReturn<T> {
   const {
     intervalMs,
     enabled = true,
@@ -20,13 +16,7 @@ export function usePoll<T>(
     ...requestOptions
   } = options;
 
-  const {
-    data,
-    isLoading,
-    error,
-    refetch,
-    fromCache,
-  } = useFetch<T>(url, {
+  const { data, isLoading, error, refetch, fromCache } = useFetch<T>(url, {
     cacheTimeMs,
     retryCount,
     retryDelayMs,
