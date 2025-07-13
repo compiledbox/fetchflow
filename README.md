@@ -4,14 +4,14 @@
 
 **FetchFlow** A modern, production-ready data fetching library for React. FetchFlow helps you fetch, cache, and manage data from REST or GraphQL APIs with minimal code, strong TypeScript support, robust error handling, retries, and performance-focused caching. It unifies REST and GraphQL requests with built-in caching, retries, and robust error handling. Designed for modern apps—no boilerplate, just reliable data, fast.
 
-## 🚩 Why FetchFlow?
+## Why FetchFlow?
 
 - **No more boilerplate**: Unified hooks for REST and GraphQL, so you never re-write the same fetch/useEffect code again.
 - **Automatic caching & retries**: Avoid unnecessary network calls, handle flaky networks gracefully.
 - **Consistent error handling**: Standardized error objects, so you never need to guess why a request failed.
 - **Framework focused**: Built for React (Vue support can be requested via issues).
 
-## 🛠️ Key Features
+## Key Features
 
 - Works with REST and GraphQL out of the box.
 - Type-safe React hooks: useFetch, usePoll, useMutation
@@ -20,13 +20,13 @@
 - Clean error messages via a single FetchError class
 - Easy to extend and contribute
 
-## 🚀 Installation
+## Installation
 
 ```bash
 npm install fetchflow
 ```
 
-## 📚 Quick Usage
+## Quick Usage
 
 ### 1. Simple REST Fetch
 
@@ -78,7 +78,7 @@ const data = await graphqlClient<{ user: User }>('https://graphql.example.com', 
 });
 ```
 
-## 🔒 Advanced: Authenticated/API Credential Requests
+## Advanced: Authenticated/API Credential Requests
 
 #### REST (token in header)
 
@@ -109,7 +109,7 @@ const result = await graphqlClient<{ user: User }>(
 );
 ```
 
-## 📖 List of Main Methods / Hooks
+## List of Main Methods / Hooks
 
 | Method          | Description                                 |
 | --------------- | ------------------------------------------- |
