@@ -87,7 +87,7 @@ FetchFlow works seamlessly in both browser and Node.js. Under Node 18+ you have 
 
 import React from 'react';
 import fetch from 'node-fetch';                // or leave out in Node 18+
-import { useFetch } from 'fetchflow/adapters/react';
+import { useFetch } from 'fetchflow';
 
 type Item = { id: number; name: string };
 
@@ -134,7 +134,7 @@ const { data } = useFetch<User[]>('https://api.example.com/secure/users', {
 #### GraphQL (with credentials)
 
 ```typescript
-import { graphqlClient } from 'fetchflow/core/network/graphqlClient';
+import { graphqlClient } from 'fetchflow';
 
 const result = await graphqlClient<{ user: User }>(
   'https://graphql.example.com',
@@ -212,7 +212,7 @@ const users = persistentCache.get('my-key');
 
 ```typescript
 import React, { useState } from 'react';
-import { useMutation } from 'fetchflow/adapters/react';
+import { useMutation } from 'fetchflow';
 
 type LoginResponse = { token: string };
 type LoginPayload = { username: string; password: string };
@@ -275,7 +275,7 @@ The error property from useMutation will be populated with a FetchError if the c
 After storing the token, use it in your API calls:
 
 ```typescript
-import { useFetch } from 'fetchflow/adapters/react';
+import { useFetch } from 'fetchflow';
 
 const token = localStorage.getItem('sessionToken');
 const { data, error } = useFetch<User[]>('https://api.example.com/users', {
