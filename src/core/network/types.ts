@@ -15,10 +15,11 @@ export interface GraphQLResponse<T> {
   errors?: Array<{ message: string; path?: string[]; extensions?: Record<string, unknown> }>;
 }
 
-export interface RequestOptions {
+export interface RequestOptions<T = unknown> {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   body?: object; // Will be serialized to JSON
   timeoutMs?: number;
   credentials?: RequestCredentials;
+  customFetch?: typeof fetch;
 }

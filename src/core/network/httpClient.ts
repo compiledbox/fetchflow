@@ -1,44 +1,54 @@
 import { FetchError } from '../errors/FetchError';
 import { RequestOptions } from './types';
 
-const DEFAULT_TIMEOUT = 15000; // 15 seconds timeout
+const DEFAULT_TIMEOUT = 15000;
 
-/**
- * Secure, robust HTTP client wrapping native fetch.
- */
-export async function httpClient<T>(url: string, options: RequestOptions = {}): Promise<T> {
+export async function httpClient<T>(
+  url: string,
+  options: RequestOptions = {}
+): Promise<T> {
   const {
     method = 'GET',
     headers = {},
     body,
     timeoutMs = DEFAULT_TIMEOUT,
     credentials = 'same-origin',
+    customFetch,
   } = options;
 
-  // Ensure headers always include necessary security headers
   const finalHeaders = new Headers({
     'Content-Type': 'application/json',
     Accept: 'application/json',
     ...headers,
   });
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const controller = typeof AbortController !== 'undefined'
+    ? new AbortController()
+    : undefined;
+  const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined;
 
   const fetchOptions: RequestInit = {
     method,
     headers: finalHeaders,
     credentials,
-    signal: controller.signal,
+    ...(controller ? { signal: controller.signal } : {}),
   };
 
   if (body && method !== 'GET') {
     fetchOptions.body = JSON.stringify(body);
   }
 
+  const fetchToUse = customFetch || (typeof fetch !== 'undefined' ? fetch : undefined);
+
+  if (!fetchToUse) {
+    throw FetchError.unknownError(
+      new Error('No fetch implementation found. For SSR, provide custom fetch in options.')
+    );
+  }
+
   try {
-    const response = await fetch(url, fetchOptions);
-    clearTimeout(timeout);
+    const response = await fetchToUse(url, fetchOptions);
+    if (timeout) clearTimeout(timeout);
 
     if (!response.ok) {
       const responseText = await response.text();
@@ -59,13 +69,13 @@ export async function httpClient<T>(url: string, options: RequestOptions = {}): 
 
     throw FetchError.unknownError(new Error('Unexpected content-type received'));
   } catch (error) {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
 
     if (error instanceof FetchError) {
       throw error;
     }
 
-    if (error instanceof DOMException && error.name === 'AbortError') {
+    if (typeof DOMException !== 'undefined' && error instanceof DOMException && error.name === 'AbortError') {
       throw FetchError.timeoutError(timeoutMs);
     }
 
