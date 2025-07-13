@@ -78,6 +78,44 @@ const data = await graphqlClient<{ user: User }>('https://graphql.example.com', 
 });
 ```
 
+## SSR Compatibility
+
+FetchFlow works seamlessly in both browser and Node.js. Under Node 18+ you have a global fetch, but you can still inject a custom implementation (e.g. to add logging, metrics, or polyfills) via the customFetch option. No browser‐only APIs are used in core.
+
+```typescript
+// pages/index.tsx (Next.js example)
+
+import React from 'react';
+import fetch from 'node-fetch';                // or leave out in Node 18+
+import { useFetch } from 'fetchflow/adapters/react';
+
+type Item = { id: number; name: string };
+
+export default function Page() {
+  // On the server, Next.js will render this component,
+  // useFetch will use the global fetch or your customFetch.
+  const { data, isLoading, error } = useFetch<Item[]>(
+    'https://api.example.com/items',
+    {
+      // only needed if you want to override or polyfill fetch:
+      customFetch: fetch,
+      cacheTimeMs: 2 * 60_000,  // 2-minute cache
+    }
+  );
+
+  if (isLoading) return <p>Loading…</p>;
+  if (error)     return <p>Error: {error.message}</p>;
+  return (
+    <ul>
+      {data!.map(item => <li key={item.id}>{item.name}</li>)}
+    </ul>
+  );
+}
+```
+- No extra setup: In modern Node 18+ environments you can omit customFetch entirely and it will default to the built-in fetch.
+- Safe in SSR: No references to window or browser-only APIs leak into your server bundle.
+- Flexible: Swap in any fetch-compatible function for logging, telemetry, or testing.
+
 ## Advanced: Authenticated/API Credential Requests
 
 #### REST (token in header)
@@ -167,7 +205,7 @@ const users = persistentCache.get('my-key');
 #### Note
 
 - The core useFetch and usePoll hooks use only in-memory cache by default for performance and simplicity.
-- If you want to swap in localStorage-based cache globally, you would need to fork and slightly extend the hook to allow a cacheProvider option (this is easy—ask if you want this snippet).
+- If you want to swap in localStorage-based cache globally, you would need to fork and slightly extend the hook to allow a cacheProvider option.
 
 ## Login Request: How to Retrieve & Store a Session Token
 
