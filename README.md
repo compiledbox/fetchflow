@@ -112,6 +112,7 @@ export default function Page() {
   );
 }
 ```
+
 - No extra setup: In modern Node 18+ environments you can omit customFetch entirely and it will default to the built-in fetch.
 - Safe in SSR: No references to window or browser-only APIs leak into your server bundle.
 - Flexible: Swap in any fetch-compatible function for logging, telemetry, or testing.

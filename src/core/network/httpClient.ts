@@ -3,10 +3,7 @@ import { RequestOptions } from './types';
 
 const DEFAULT_TIMEOUT = 15000;
 
-export async function httpClient<T>(
-  url: string,
-  options: RequestOptions = {}
-): Promise<T> {
+export async function httpClient<T>(url: string, options: RequestOptions = {}): Promise<T> {
   const {
     method = 'GET',
     headers = {},
@@ -22,9 +19,7 @@ export async function httpClient<T>(
     ...headers,
   });
 
-  const controller = typeof AbortController !== 'undefined'
-    ? new AbortController()
-    : undefined;
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : undefined;
   const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined;
 
   const fetchOptions: RequestInit = {
@@ -42,7 +37,7 @@ export async function httpClient<T>(
 
   if (!fetchToUse) {
     throw FetchError.unknownError(
-      new Error('No fetch implementation found. For SSR, provide custom fetch in options.')
+      new Error('No fetch implementation found. For SSR, provide custom fetch in options.'),
     );
   }
 
@@ -75,7 +70,11 @@ export async function httpClient<T>(
       throw error;
     }
 
-    if (typeof DOMException !== 'undefined' && error instanceof DOMException && error.name === 'AbortError') {
+    if (
+      typeof DOMException !== 'undefined' &&
+      error instanceof DOMException &&
+      error.name === 'AbortError'
+    ) {
       throw FetchError.timeoutError(timeoutMs);
     }
 
