@@ -49,7 +49,7 @@ export function useFetch<T>(url: string, options: UseFetchOptions = {}): UseFetc
         setIsLoading(false);
       }
     }
-  }, [url, cacheTimeMs, retryCount, retryDelayMs, cacheEnabled, requestOptions]);
+  }, [url, cacheTimeMs, retryCount, retryDelayMs, cacheEnabled, JSON.stringify(requestOptions)]);
 
   useEffect(() => {
     if (enabled) {
